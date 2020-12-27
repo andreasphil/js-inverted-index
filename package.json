@@ -1,22 +1,43 @@
 {
-  "name": "search.js",
+  "name": "use-search",
   "version": "0.1.0",
-  "description": "Fast, dependency-free index search for the frontend",
-  "main": "src/index.js",
+  "description": "Lightweight index search for the frontend with no runtime dependencies",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsc -w",
+    "test": "nyc ava",
+    "test:watch": "ava --watch",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andreasphil/search.js.git"
+    "url": "git+https://github.com/andreasphil/use-search.git"
   },
   "author": "Andreas Philippi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/andreasphil/search.js/issues"
+    "url": "https://github.com/andreasphil/use-search/issues"
   },
-  "homepage": "https://github.com/andreasphil/search.js#readme"
+  "homepage": "https://github.com/andreasphil/use-search#readme",
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.0",
+    "ava": "^3.14.0",
+    "eslint": "^7.16.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "nyc": "^15.1.0",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
 }

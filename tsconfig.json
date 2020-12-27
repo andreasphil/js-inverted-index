@@ -1,0 +1,9 @@
+{
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "lib": ["es2019"],
+    "outDir": "dist",
+    "declaration": true
+  }
+}
