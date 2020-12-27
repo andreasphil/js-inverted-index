@@ -1,0 +1,22 @@
+{
+  "name": "search.js",
+  "version": "0.1.0",
+  "description": "Fast, dependency-free index search for the frontend",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreasphil/search.js.git"
+  },
+  "author": "Andreas Philippi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreasphil/search.js/issues"
+  },
+  "homepage": "https://github.com/andreasphil/search.js#readme"
+}
