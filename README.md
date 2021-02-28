@@ -1,6 +1,6 @@
 # useSearch
 
-**Lightweight index search for the frontend with no runtime dependencies. If `Array.filter()` is too little and everything else is too much 👀**
+**Lightweight index search for the frontend with no runtime dependencies. If `Array.filter()` is almost good enough, but not quite 👀**
 
 ## Installation
 
@@ -16,7 +16,7 @@ There's no package on npm for the time being, but you can install the latest ver
 
 ## Basic usage
 
-useSearch implements a simple [inverted index](https://en.wikipedia.org/wiki/Inverted_index) for `string`s or stringified data, called documents. To get started, initialize the index and tell it which properties should be indexed:
+This package implements a simple [inverted index](https://en.wikipedia.org/wiki/Inverted_index) for `string`s or stringified data, called documents. To get started, initialize the index and tell it which properties should be indexed:
 
 ```js
 const data = [
@@ -86,12 +86,12 @@ import { lowercaseTrim } from "./normalizers"
 import { matchAllTerms } from "./searchers"
 
 const { search, add } = useSearch({
-  fields: ["title", "director.name", "rating"],
-
   identifier: idProp("id"),
   tokenizer: fullWordSplit,
   normalizer: lowercaseTrim,
   searcher: matchAllTerms,
+
+  // `fields` always has to be configured
 })
 ```
 

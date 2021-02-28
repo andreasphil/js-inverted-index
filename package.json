@@ -12,7 +12,7 @@
     "start": "tsc -w",
     "test": "nyc ava",
     "test:watch": "ava --watch",
-    "build": "tsc"
+    "build": "tsc --emitDeclarationOnly & esbuild ./src/ --outdir=dist --bundle --format=esm"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
     "ava": "^3.14.0",
+    "esbuild": "^0.8.53",
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-config-standard": "^16.0.2",
