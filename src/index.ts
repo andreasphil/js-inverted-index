@@ -120,7 +120,9 @@ function addToIndex<T = any>(
     const id = identifier(document)
 
     // Extract the specified fields from the document
-    const values = fields.map(path => unwrap(document, path))
+    const values = fields
+      .map(path => unwrap(document, path))
+      .filter(value => !!value)
 
     // Split the values into individual tokens and normalize the tokens
     const tokens = values

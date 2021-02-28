@@ -60,7 +60,7 @@ function addToIndex(index, documents, options) {
   const {tokenizer, identifier, normalizer, fields} = options;
   return documents.reduce((newIndex, document) => {
     const id = identifier(document);
-    const values = fields.map((path) => unwrap(document, path));
+    const values = fields.map((path) => unwrap(document, path)).filter((value) => !!value);
     const tokens = values.flatMap((value) => tokenizer(value.toString())).map((token) => normalizer(token));
     tokens.forEach((token) => {
       if (newIndex[token]) {
