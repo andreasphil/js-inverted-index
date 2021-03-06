@@ -1,11 +1,3 @@
-// src/identifiers.ts
-function idProp(prop) {
-  return (document) => document[prop];
-}
-
-// src/normalizers.ts
-var lowercaseTrim = (input) => input?.trim().toLowerCase();
-
 // src/utils.ts
 function unwrap(obj, prop) {
   if (!obj) {
@@ -37,8 +29,10 @@ function intersect(...sets) {
   setsCopy.unshift(intersection);
   return intersect(...setsCopy);
 }
-
-// src/searchers.ts
+function idProp(prop) {
+  return (document) => document[prop];
+}
+var lowercaseTrim = (input) => input?.trim().toLowerCase();
 var matchAllTerms = (index, term, options) => {
   if (!term || Object.keys(index).length === 0) {
     return new Set();
@@ -48,8 +42,6 @@ var matchAllTerms = (index, term, options) => {
   const matches = termTokens.map((token) => index[token]);
   return intersect(...matches);
 };
-
-// src/tokenizers.ts
 function regexSplit(exp) {
   return (input) => input ? input.match(exp) || [] : [];
 }
@@ -60,9 +52,7 @@ function addToIndex(index, documents, options) {
   const {tokenizer, identifier, normalizer, fields} = options;
   return documents.reduce((newIndex, document) => {
     const id = identifier(document);
-    const values = fields.map((path) => unwrap(document, path)).filter((value) => !!value);
-    const tokens = values.flatMap((value) => tokenizer(value.toString())).map((token) => normalizer(token));
-    tokens.forEach((token) => {
+    fields.map((path) => unwrap(document, path)).filter((value) => !!value).flatMap((value) => tokenizer(value.toString())).map((token) => normalizer(token)).forEach((token) => {
       if (newIndex[token]) {
         newIndex[token].add(id);
       } else {
@@ -72,7 +62,7 @@ function addToIndex(index, documents, options) {
     return newIndex;
   }, index);
 }
-function useSearch(options = {}, initial) {
+function initSearch(options = {}, initial) {
   const effectiveOptions = {
     tokenizer: fullWordSplit,
     identifier: idProp("id"),
@@ -88,7 +78,7 @@ function useSearch(options = {}, initial) {
   };
 }
 export {
-  useSearch as default,
+  initSearch as default,
   fullWordSplit,
   idProp,
   intersect,

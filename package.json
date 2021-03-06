@@ -1,6 +1,6 @@
 {
-  "name": "use-search",
-  "version": "0.1.0",
+  "name": "js-inverted-index",
+  "version": "1.0.0",
   "description": "Lightweight index search for the frontend with no runtime dependencies",
   "type": "module",
   "main": "dist/index.js",
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andreasphil/use-search.git"
+    "url": "git+https://github.com/andreasphil/js-inverted-index.git"
   },
   "author": "Andreas Philippi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/andreasphil/use-search/issues"
+    "url": "https://github.com/andreasphil/js-inverted-index/issues"
   },
-  "homepage": "https://github.com/andreasphil/use-search#readme",
+  "homepage": "https://github.com/andreasphil/js-inverted-index#readme",
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^4.11.0",

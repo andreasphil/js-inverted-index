@@ -1,7 +1,10 @@
-/**
- * Specifies a nested property inside an object.
- */
-export type PropPath = string | any[]
+import {
+  PropPath,
+  IdentifyFn,
+  NormalizeFn,
+  SearchFn,
+  TokenizeFn,
+} from "./types"
 
 /**
  * Recursively reads the value of a property from nested object structures. For
@@ -63,3 +66,55 @@ export function intersect<T = any>(...sets: Set<T>[]): Set<T> {
 
   return intersect(...setsCopy)
 }
+
+/**
+ * Identifies documents by the value of a property.
+ *
+ * @param prop Name of the ID prop
+ * @returns Callback returning the value of the ID prop for a document
+ */
+export function idProp<T = any>(prop: keyof T): IdentifyFn<T> {
+  return document => document[prop]
+}
+
+/**
+ * Removes leading/trailing whitespace and converts the value to lowercase.
+ */
+export const lowercaseTrim: NormalizeFn = input => input?.trim().toLowerCase()
+
+/**
+ * Looks up all ID entries in the index for a search term. The search term is
+ * split according to the provided matcher expression. If the term consists of
+ * multiple words, only results containing all words are returned.
+ *
+ * @param index Search index to get the results from
+ * @param term Search term to look up
+ * @param options Indexing options
+ * @returns A set containing the IDs associated with the search term
+ */
+export const matchAllTerms: SearchFn = (index, term, options) => {
+  if (!term || Object.keys(index).length === 0) {
+    return new Set()
+  }
+
+  const { tokenizer, normalizer } = options
+  const termTokens = tokenizer(term).map(token => normalizer(token))
+  const matches = termTokens.map(token => index[token])
+
+  return intersect(...matches)
+}
+
+/**
+ * Returns a new tokenizer that splits a value based on the specified regex.
+ *
+ * @param exp Regex used for splitting a value
+ * @returns Callback splitting values based on the specified regex
+ */
+export function regexSplit(exp: RegExp): TokenizeFn {
+  return input => (input ? input.match(exp) || [] : [])
+}
+
+/**
+ * Returns a tokenizer that splits values on word boundaries.
+ */
+export const fullWordSplit = regexSplit(/\w+/g)

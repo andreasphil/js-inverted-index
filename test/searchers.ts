@@ -1,11 +1,12 @@
 import anyTest, { Macro, TestInterface } from "ava"
-import useSearch, { matchAllTerms, Search } from "../src"
+import initSearch, { matchAllTerms } from "../src"
+import { Search } from "../src/types"
 
 type SearchContext = { search: Search<any, number>["search"] }
 const test = anyTest as TestInterface<SearchContext>
 
 test.before(t => {
-  const { search } = useSearch<any, number>(
+  const { search } = initSearch<any, number>(
     {
       searcher: matchAllTerms,
     },
@@ -25,7 +26,7 @@ test.before(t => {
 })
 
 test("doesn't crash with empty options", t => {
-  t.notThrows(() => useSearch())
+  t.notThrows(() => initSearch())
 })
 
 const matchAllTermsMacro: Macro<[string, number[]], SearchContext> = (

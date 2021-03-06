@@ -1,5 +1,6 @@
 import test, { Macro } from "ava"
-import { intersect, PropPath, unwrap } from "../src"
+import { intersect, unwrap } from "../src"
+import { PropPath } from "../src/types"
 
 const unwrapMacro: Macro<[PropPath, any]> = (t, input, expected) => {
   const obj = {

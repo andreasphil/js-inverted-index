@@ -1,5 +1,6 @@
 import anyTest, { Macro, TestInterface } from "ava"
-import { fullWordSplit, TokenizeFn } from "../src"
+import { fullWordSplit } from "../src"
+import { TokenizeFn } from "../src/types"
 
 const test = anyTest as TestInterface<{ tokenizer: TokenizeFn }>
 
