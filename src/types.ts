@@ -1,13 +1,15 @@
+// deno-lint-ignore-file no-explicit-any
+
 /**
  * Specifies a nested property inside an object.
  */
-export type PropPath = string | any[]
+export type PropPath = string | any[];
 
 /**
  * Mapping of search terms to a set of the IDs of objects matching the search
  * term.
  */
-export type SearchIndex<T = any> = Record<string, Set<T>>
+export type SearchIndex<T = any> = Record<string, Set<T>>;
 
 /**
  * Takes a document and returns a value that can be used for uniqeuly
@@ -16,7 +18,7 @@ export type SearchIndex<T = any> = Record<string, Set<T>>
  * @param document Original document
  * @returns Identifier of the document
  */
-export type IdentifyFn<T = any, U = any> = (document: T) => U
+export type IdentifyFn<T = any, U = any> = (document: T) => U;
 
 /**
  * Takes a string and splits it into individual tokens. These tokens will be
@@ -25,7 +27,7 @@ export type IdentifyFn<T = any, U = any> = (document: T) => U
  * @param input Source string
  * @returns Tokens found in the source string
  */
-export type TokenizeFn = (input: string) => string[]
+export type TokenizeFn = (input: string) => string[];
 
 /**
  * Takes a string and returns it in a normalized format, e.g. converts it to
@@ -34,7 +36,7 @@ export type TokenizeFn = (input: string) => string[]
  * @param input Source string
  * @returns Normalized string
  */
-export type NormalizeFn = (input: string) => string
+export type NormalizeFn = (input: string) => string;
 
 /**
  * Takes and index and returns all search results for the specified term. Calls
@@ -50,8 +52,8 @@ export type NormalizeFn = (input: string) => string
 export type SearchFn<T = any> = (
   index: SearchIndex,
   term: string,
-  options: IndexingOptions // eslint-disable-line
-) => Set<T>
+  options: IndexingOptions, // eslint-disable-line
+) => Set<T>;
 
 /**
  * Specifies configuration for building a search index.
@@ -60,28 +62,28 @@ export type IndexingOptions = {
   /**
    * Callback used for extracting an ID from a document.
    */
-  identifier: IdentifyFn
+  identifier: IdentifyFn;
 
   /**
    * Callback used for splitting a value of a document into individual tokens.
    */
-  tokenizer: TokenizeFn
+  tokenizer: TokenizeFn;
 
   /**
    * Callback used for normalizing the format of the tokens.
    */
-  normalizer: NormalizeFn
+  normalizer: NormalizeFn;
 
   /**
    * Callback used for looking up terms in the index.
    */
-  searcher: SearchFn
+  searcher: SearchFn;
 
   /**
    * An array containing the properties that should be indexed.
    */
-  fields: PropPath[]
-}
+  fields: PropPath[];
+};
 
 /**
  * The closure returned when the search has been initialized. Contains methods
@@ -91,10 +93,10 @@ export type Search<T = any, U = any> = {
   /**
    * Adds new documents to the index.
    */
-  add: (documents: T[]) => void
+  add: (documents: T[]) => void;
 
   /**
    * Returns matches for a term in the index.
    */
-  search: (term: string) => Set<U>
-}
+  search: (term: string) => Set<U>;
+};

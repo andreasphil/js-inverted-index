@@ -1,6 +1,6 @@
 # Inverted Index with JS
 
-Lightweight index search for the frontend with no runtime dependencies.
+Lightweight index search for Deno and browsers with no runtime dependencies.
 
 ## Installation
 
