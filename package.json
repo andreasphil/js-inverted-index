@@ -12,7 +12,6 @@
     "url": "git+https://github.com/andreasphil/js-inverted-index.git"
   },
   "author": "Andreas Philippi",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/andreasphil/js-inverted-index/issues"
   },
