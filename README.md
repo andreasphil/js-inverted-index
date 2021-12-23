@@ -2,15 +2,13 @@
 
 Lightweight index search for Deno and browsers with no runtime dependencies.
 
+> ⚠️ I originally implemented this as an exercise for [Stargaze](https://github.com/andreasphil/stargaze). It does what I needed it to at the time, but it's by no means feature complete or convenient to use. You'll probably want to try [js-search](https://github.com/bvaughn/js-search) instead.
+
 ## Installation
 
 ```
 npm i github:andreasphil/js-inverted-index
 ```
-
-## Limitations
-
-I originally implemented this as an exercise for [Stargaze](https://github.com/andreasphil/stargaze). It does what I needed it to at the time, but it's by no means feature complete or convenient to use. You'll probably want to try [js-search](https://github.com/bvaughn/js-search) instead.
 
 ## Basic usage
 
