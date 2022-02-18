@@ -1,5 +1,11 @@
-// deno-lint-ignore-file no-explicit-any
-import { IndexingOptions, Search, SearchIndex } from "./types.ts";
+import type {
+  IndexingOptions,
+  Search,
+  Searchable,
+  SearchIndex,
+  SearchIndexDump,
+  Stringable,
+} from "./types.ts";
 import {
   fullWordSplit,
   idProp,
@@ -8,71 +14,77 @@ import {
   unwrap,
 } from "./utils.ts";
 
-/**
- * Adds the specified data to an existing search index.
- *
- * @param index Existing index
- * @param documents New data to add
- * @param options Indexing options
- * @returns Combined search index containing the old and new data
- */
-function addToIndex<T = any>(
-  index: SearchIndex,
-  documents: T[],
-  options: IndexingOptions,
-): SearchIndex {
-  const { tokenizer, identifier, normalizer, fields } = options;
-
-  return documents.reduce<SearchIndex>((newIndex, document) => {
-    // Get the ID of the document
-    const id = identifier(document);
-
-    fields
-      // Extract the specified fields from the document
-      .map((path) => unwrap(document, path))
-      .filter((value) => !!value)
-      // Split the values into individual tokens and normalize the tokens
-      .flatMap((value) => tokenizer(value.toString()))
-      .map((token) => normalizer(token))
-      // Map all tokens to the IDs of the documents they're contained in
-      .forEach((token) => {
-        if (newIndex[token]) {
-          newIndex[token].add(id);
-        } else {
-          newIndex[token] = new Set([id]);
-        }
-      });
-
-    return newIndex;
-  }, index);
-}
-
-/**
- * Creates a new search index and returns functions for interacting with it.
- *
- * @param options Configuration for the index
- * @param initial Existing search index
- */
-export default function initSearch<DocumentType = any, IdType = any>(
+/** Creates a new search index and returns functions for interacting with it */
+export default function createSearch<T extends Searchable>(
   options: Partial<IndexingOptions> = {},
-  initial?: SearchIndex<IdType>,
-): Search<DocumentType, IdType> {
+): Search<T> {
   // Merge custom and default options
   const effectiveOptions: IndexingOptions = {
     tokenizer: fullWordSplit,
     identifier: idProp("id"),
     normalizer: lowercaseTrim,
-    fields: [],
     searcher: matchAllTerms,
+    fields: [],
     ...options,
   };
 
-  const index = initial || {};
+  /** Map of possible search terms -> document IDs */
+  let index: SearchIndex = {};
+  /** Map of document IDs -> original documents */
+  let indexedDocuments: Record<string, T> = {};
 
-  return {
-    add: (documents) => addToIndex(index, documents, effectiveOptions),
-    search: (term) => effectiveOptions.searcher(index, term, effectiveOptions),
+  /** Search the list of documents for a specific search term */
+  const search: Search<T>["search"] = (term) => {
+    const matches: T[] = [];
+    const idMatches = effectiveOptions.searcher(index, term, effectiveOptions);
+    idMatches.forEach((id) => {
+      if (indexedDocuments[id]) matches.push(indexedDocuments[id]);
+    });
+
+    return matches;
   };
+
+  const add: Search<T>["add"] = (documents) => {
+    const { tokenizer, identifier, normalizer, fields } = effectiveOptions;
+
+    documents.forEach((document) => {
+      const id = identifier(document);
+      indexedDocuments[id] = document;
+
+      fields
+        .map((path) => unwrap(document, path))
+        .filter((value): value is Stringable => !!value?.toString)
+        .flatMap((value) => tokenizer(value.toString()))
+        .map((token) => normalizer(token))
+        .forEach((token) => {
+          if (index[token]) index[token].add(id);
+          else index[token] = new Set([id]);
+        });
+    });
+  };
+
+  const dump: Search<T>["dump"] = () =>
+    Object.entries(index).reduce<SearchIndexDump>((all, [k, v]) => {
+      all[k] = Array.from(v);
+      return all;
+    }, {});
+
+  const hydrate: Search<T>["hydrate"] = (
+    dump: SearchIndexDump,
+    documents: T[],
+  ) => {
+    index = Object.entries(dump).reduce<SearchIndex>((all, [k, v]) => {
+      all[k] = new Set(v);
+      return all;
+    }, {});
+
+    indexedDocuments = documents.reduce<Record<string, T>>((all, i) => {
+      all[effectiveOptions.identifier(i)] = i;
+      return all;
+    }, {});
+  };
+
+  return { search, add, dump, hydrate };
 }
 
 // Expose utilities and building blocks for customization

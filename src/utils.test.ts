@@ -11,6 +11,7 @@ import {
   unwrap,
 } from "./utils.ts";
 import initSearch, { matchAllTerms } from "./index.ts";
+import createSearch from "./index.ts";
 
 // ID prop extract
 Deno.test("returns the property value from an object", () => {
@@ -64,28 +65,30 @@ Deno.test("doesn't crash with empty options", () => {
 });
 
 (() => {
-  const { search } = initSearch<any, number>({
+  const { search, hydrate } = createSearch<any>({
     searcher: matchAllTerms,
-  }, {
-    lorem: new Set([1, 2, 3]),
-    ipsum: new Set([1, 2, 3]),
-    dolor: new Set([4, 5]),
-    sit: new Set([2]),
-    amet: new Set([3, 4]),
-    consetetur: new Set([1, 2, 3, 4, 5]),
-    sadipscing: new Set([0, 1, 2]),
-    elitr: new Set([10]),
   });
 
-  const searches: [string, string, number[] | never[]][] = [
-    ["a term", "lorem", [1, 2, 3]],
+  hydrate({
+    lorem: ["1", "2", "3"],
+    ipsum: ["1", "2", "3"],
+    dolor: ["4", "5"],
+    sit: ["2"],
+    amet: ["3", "4"],
+    consetetur: ["1", "2", "3", "4", "5"],
+    sadipscing: ["0", "1", "2"],
+    elitr: ["10"],
+  }, Array(10).fill(0).map((_, i) => ({ id: (i + 1).toString() })));
+
+  const searches: [string, string, string[] | never[]][] = [
+    ["a term", "lorem", ["1", "2", "3"]],
     ["a non-existent term", "diam", []],
     ["no term", "", []],
     ["a term that normalizes to empty", ",.#$", []],
-    ["narrowing with a second term", "lorem. amet?", [3]],
-    ["narrowing with a second term (swapped)", "amet? lorem.", [3]],
+    ["narrowing with a second term", "lorem. amet?", ["3"]],
+    ["narrowing with a second term (swapped)", "amet? lorem.", ["3"]],
     ["narrowing with a non-existent term", "consetetur diam", []],
-    ["narrowing with a third term", "sit sadipscing **consetetur**", [2]],
+    ["narrowing with a third term", "sit sadipscing **consetetur**", ["2"]],
     ["narrowing with a third, non-existent term", "sit sadipscing diam", []],
   ];
 
@@ -93,7 +96,7 @@ Deno.test("doesn't crash with empty options", () => {
     Deno.test(
       `finds matches for ${title}`,
       () => {
-        const results = Array.from(search(input));
+        const results = search(input).map(({ id }) => id);
         assertEquals(results, expected);
       },
     );

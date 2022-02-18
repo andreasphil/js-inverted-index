@@ -1,10 +1,11 @@
 // deno-lint-ignore-file no-explicit-any
-import {
-  IdentifyFn,
-  NormalizeFn,
+import type {
+  IdentifierFn,
+  NormalizerFn,
   PropPath,
-  SearchFn,
-  TokenizeFn,
+  SearcherFn,
+  Stringable,
+  TokenizerFn,
 } from "./types.ts";
 
 /**
@@ -13,29 +14,18 @@ import {
  *
  * getNestedProp({ a: { b: 'value' }}, 'a.b') // => 'value'
  * getNestedProp({ a: { b: 'value' }}, ['a', 'b']) // => 'value'
- *
- * @param obj Object to get the value from
- * @param prop Path to the property inside the object. Can be an array or a
- *             string with property names separated by '.')
- * @returns The property value. Can be undefined if the specified property
- *          doesn't exist
  */
-export function unwrap<T = any>(
+export function unwrap(
   obj: Record<string, any>,
   prop: PropPath,
-): T | undefined {
-  if (!obj) {
-    return undefined;
-  }
+): Stringable | undefined {
+  if (!obj) return undefined;
 
   const path = Array.isArray(prop) ? prop : prop.split(".");
   const [head, ...tail] = path;
 
-  if (tail.length) {
-    return unwrap(obj[head], tail);
-  } else {
-    return obj[head];
-  }
+  if (tail.length) return unwrap(obj[head], tail);
+  else return obj[head];
 }
 
 /**
@@ -44,23 +34,17 @@ export function unwrap<T = any>(
  * @param sets Sets to get common elements from
  * @returns Set containing the elements shared among the source sets
  */
-export function intersect<T = any>(...sets: Set<T>[]): Set<T> {
-  if (!sets.length || sets.some((set) => !set)) {
-    return new Set();
-  } else if (sets.length === 1) {
-    return sets[0];
-  }
+export function intersect<T = unknown>(...sets: Set<T>[]): Set<T> {
+  if (!sets.length || sets.some((set) => !set)) return new Set();
+  else if (sets.length === 1) return sets[0];
 
   const setsCopy = [...sets];
-
   const a = setsCopy.shift();
   const b = setsCopy.shift();
   const intersection = new Set<T>();
 
   a!.forEach((itemFromA) => {
-    if (b!.has(itemFromA)) {
-      intersection.add(itemFromA);
-    }
+    if (b!.has(itemFromA)) intersection.add(itemFromA);
   });
 
   setsCopy.unshift(intersection);
@@ -68,33 +52,23 @@ export function intersect<T = any>(...sets: Set<T>[]): Set<T> {
   return intersect(...setsCopy);
 }
 
-/**
- * Identifies documents by the value of a property.
- *
- * @param prop Name of the ID prop
- * @returns Callback returning the value of the ID prop for a document
- */
-export function idProp<T>(prop: keyof T): IdentifyFn<T> {
-  return (document) => document[prop];
+/** Identifies documents by the value of a property */
+export function idProp<T extends Record<string, any>>(
+  prop: keyof T,
+): IdentifierFn<T> {
+  return (document) => document[prop]?.toString?.();
 }
 
-/**
- * Removes leading/trailing whitespace and converts the value to lowercase.
- */
-export const lowercaseTrim: NormalizeFn = (input) =>
+/** Removes leading/trailing whitespace and converts the value to lowercase */
+export const lowercaseTrim: NormalizerFn = (input) =>
   input?.trim().toLowerCase();
 
 /**
  * Looks up all ID entries in the index for a search term. The search term is
  * split according to the provided matcher expression. If the term consists of
  * multiple words, only results containing all words are returned.
- *
- * @param index Search index to get the results from
- * @param term Search term to look up
- * @param options Indexing options
- * @returns A set containing the IDs associated with the search term
  */
-export const matchAllTerms: SearchFn = (index, term, options) => {
+export const matchAllTerms: SearcherFn = (index, term, options) => {
   if (!term || Object.keys(index).length === 0) {
     return new Set();
   }
@@ -106,17 +80,10 @@ export const matchAllTerms: SearchFn = (index, term, options) => {
   return intersect(...matches);
 };
 
-/**
- * Returns a new tokenizer that splits a value based on the specified regex.
- *
- * @param exp Regex used for splitting a value
- * @returns Callback splitting values based on the specified regex
- */
-export function regexSplit(exp: RegExp): TokenizeFn {
+/** Returns a new tokenizer that splits a value based on the specified regex */
+export function regexSplit(exp: RegExp): TokenizerFn {
   return (input) => (input ? input.match(exp) || [] : []);
 }
 
-/**
- * Returns a tokenizer that splits values on word boundaries.
- */
+/** Returns a tokenizer that splits values on word boundaries */
 export const fullWordSplit = regexSplit(/\w+/g);

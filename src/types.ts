@@ -1,15 +1,19 @@
 // deno-lint-ignore-file no-explicit-any
 
-/**
- * Specifies a nested property inside an object.
- */
-export type PropPath = string | any[];
+/** Specifies a nested property inside an object */
+export type PropPath = string | string[];
 
-/**
- * Mapping of search terms to a set of the IDs of objects matching the search
- * term.
- */
-export type SearchIndex<T = any> = Record<string, Set<T>>;
+/** Strings or stuff that can be converted into a string */
+export type Stringable = string | { toString: () => string };
+
+/** Documents that can be added to the search index */
+export type Searchable = Record<string, unknown>;
+
+/** Mapping of search terms to the IDs of matching documents */
+export type SearchIndex = Record<string, Set<string>>;
+
+/** Search index with an ID array instead of a set (for JSON serialization) */
+export type SearchIndexDump = Record<string, string[]>;
 
 /**
  * Takes a document and returns a value that can be used for uniqeuly
@@ -18,7 +22,9 @@ export type SearchIndex<T = any> = Record<string, Set<T>>;
  * @param document Original document
  * @returns Identifier of the document
  */
-export type IdentifyFn<T = any, U = any> = (document: T) => U;
+export type IdentifierFn<T extends Searchable = any, U = string> = (
+  document: T,
+) => U;
 
 /**
  * Takes a string and splits it into individual tokens. These tokens will be
@@ -27,7 +33,7 @@ export type IdentifyFn<T = any, U = any> = (document: T) => U;
  * @param input Source string
  * @returns Tokens found in the source string
  */
-export type TokenizeFn = (input: string) => string[];
+export type TokenizerFn = (input: string) => string[];
 
 /**
  * Takes a string and returns it in a normalized format, e.g. converts it to
@@ -36,7 +42,7 @@ export type TokenizeFn = (input: string) => string[];
  * @param input Source string
  * @returns Normalized string
  */
-export type NormalizeFn = (input: string) => string;
+export type NormalizerFn = (input: string) => string;
 
 /**
  * Takes and index and returns all search results for the specified term. Calls
@@ -49,39 +55,23 @@ export type NormalizeFn = (input: string) => string;
  * @param options Options used for generating the index
  * @returns Set of IDs of documents matching the term
  */
-export type SearchFn<T = any> = (
+export type SearcherFn = (
   index: SearchIndex,
   term: string,
-  options: IndexingOptions, // eslint-disable-line
-) => Set<T>;
+  options: IndexingOptions,
+) => Set<string>;
 
-/**
- * Specifies configuration for building a search index.
- */
+/** Specifies configuration for building a search index. */
 export type IndexingOptions = {
-  /**
-   * Callback used for extracting an ID from a document.
-   */
-  identifier: IdentifyFn;
-
-  /**
-   * Callback used for splitting a value of a document into individual tokens.
-   */
-  tokenizer: TokenizeFn;
-
-  /**
-   * Callback used for normalizing the format of the tokens.
-   */
-  normalizer: NormalizeFn;
-
-  /**
-   * Callback used for looking up terms in the index.
-   */
-  searcher: SearchFn;
-
-  /**
-   * An array containing the properties that should be indexed.
-   */
+  /** Callback used for extracting an ID from a document. */
+  identifier: IdentifierFn;
+  /** Callback used for splitting a value of a document into tokens. */
+  tokenizer: TokenizerFn;
+  /** Callback used for normalizing the format of the tokens. */
+  normalizer: NormalizerFn;
+  /** Callback used for looking up terms in the index. */
+  searcher: SearcherFn;
+  /** An array containing the properties that should be indexed. */
   fields: PropPath[];
 };
 
@@ -89,14 +79,9 @@ export type IndexingOptions = {
  * The closure returned when the search has been initialized. Contains methods
  * for interacting with the index, such as adding documents or searching.
  */
-export type Search<T = any, U = any> = {
-  /**
-   * Adds new documents to the index.
-   */
+export type Search<T extends Searchable = any> = {
+  search: (term: string) => T[];
   add: (documents: T[]) => void;
-
-  /**
-   * Returns matches for a term in the index.
-   */
-  search: (term: string) => Set<U>;
+  dump: () => SearchIndexDump;
+  hydrate: (index: SearchIndexDump, documents: T[]) => void;
 };
