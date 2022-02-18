@@ -5,7 +5,8 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "build": "deno bundle ./src/index.ts ./dist/index.js"
+    "build": "deno bundle ./src/index.ts ./dist/index.js",
+    "preversion": "npm run build; git add ./dist/index.js"
   },
   "repository": {
     "type": "git",
