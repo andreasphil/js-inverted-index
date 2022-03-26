@@ -1,6 +1,10 @@
-# JavaScript Inverted Index Search
+<h1 align="center">
+  JS Inverted Index 🐕
+</h1>
 
-Lightweight index search for Deno and browsers with no runtime dependencies.
+<p align="center">
+  <strong>Lightweight index search for Deno and browsers with no runtime dependencies</strong>
+</p>
 
 > ⚠️ Work in progress. Things are most certainly incomplete and/or broken, and will definitely change. You'll probably want to try [js-search](https://github.com/bvaughn/js-search) instead.
 
