@@ -8,6 +8,7 @@ import {
   idProp,
   intersect,
   lowercaseTrim,
+  startsWith,
   unwrap,
 } from "./utils.ts";
 import initSearch, { matchAllTerms } from "./index.ts";
@@ -57,6 +58,18 @@ Deno.test("normalizes undefined", () => {
 ].forEach(([input, expected]) => {
   Deno.test(`splits "${input}"`, () =>
     assertEquals(fullWordSplit(input), expected));
+});
+
+// startsWith tokenizer
+[
+  ["hello", ["h", "he", "hel", "hell", "hello"]],
+  ["hi hi", ["h", "hi"]],
+  [undefined as any, []],
+  ["&*(@", []],
+  ["", []],
+].forEach(([input, expected]) => {
+  Deno.test(`splits "${input}"`, () =>
+    assertEquals(startsWith(input), expected));
 });
 
 // Match all terms searcher

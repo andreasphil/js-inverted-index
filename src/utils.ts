@@ -87,3 +87,23 @@ export function regexSplit(exp: RegExp): TokenizerFn {
 
 /** Returns a tokenizer that splits values on word boundaries */
 export const fullWordSplit = regexSplit(/\w+/g);
+
+/**
+ * Returns a tokenizer that returns the word itself as well as anything that
+ * that would return true if used with `startsWith`, e.g. for dog, return d,
+ * do, and dog.
+ */
+export const startsWith: TokenizerFn = (input) => {
+  const inputWords: string[] = fullWordSplit(input);
+  const tokens = new Set<string>();
+
+  inputWords
+    .filter((word) => word.length > 0)
+    .forEach((word) => {
+      for (let i = 1; i <= word.length; i++) {
+        tokens.add(word.substring(0, i));
+      }
+    });
+
+  return Array.from(tokens);
+};
