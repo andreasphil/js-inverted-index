@@ -10,8 +10,7 @@ function unwrap(obj, prop) {
     else return obj[head];
 }
 function intersect(...sets) {
-    if (!sets.length || sets.some((set)=>!set
-    )) return new Set();
+    if (!sets.length || sets.some((set)=>!set)) return new Set();
     else if (sets.length === 1) return sets[0];
     const setsCopy = [
         ...sets
@@ -26,27 +25,32 @@ function intersect(...sets) {
     return intersect(...setsCopy);
 }
 function idProp(prop) {
-    return (document)=>document[prop]?.toString?.()
-    ;
+    return (document)=>document[prop]?.toString?.();
 }
-const lowercaseTrim = (input)=>input?.trim().toLowerCase()
-;
+const lowercaseTrim = (input)=>input?.trim().toLowerCase();
 const matchAllTerms = (index, term, options)=>{
     if (!term || Object.keys(index).length === 0) {
         return new Set();
     }
     const { tokenizer , normalizer  } = options;
-    const termTokens = tokenizer(term).map((token)=>normalizer(token)
-    );
-    const matches = termTokens.map((token)=>index[token]
-    );
+    const termTokens = tokenizer(term).map((token)=>normalizer(token));
+    const matches = termTokens.map((token)=>index[token]);
     return intersect(...matches);
 };
 function regexSplit(exp) {
-    return (input)=>input ? input.match(exp) || [] : []
-    ;
+    return (input)=>input ? input.match(exp) || [] : [];
 }
 const fullWordSplit = regexSplit(/\w+/g);
+const startsWith = (input)=>{
+    const inputWords = fullWordSplit(input);
+    const tokens = new Set();
+    inputWords.filter((word)=>word.length > 0).forEach((word)=>{
+        for(let i = 1; i <= word.length; i++){
+            tokens.add(word.substring(0, i));
+        }
+    });
+    return Array.from(tokens);
+};
 export { unwrap as unwrap };
 export { intersect as intersect };
 export { idProp as idProp };
@@ -54,6 +58,7 @@ export { lowercaseTrim as lowercaseTrim };
 export { matchAllTerms as matchAllTerms };
 export { regexSplit as regexSplit };
 export { fullWordSplit as fullWordSplit };
+export { startsWith as startsWith };
 function createSearch(options = {}) {
     const effectiveOptions = {
         tokenizer: fullWordSplit,
@@ -78,11 +83,7 @@ function createSearch(options = {}) {
         documents.forEach((document)=>{
             const id = identifier(document);
             indexedDocuments[id] = document;
-            fields.map((path)=>unwrap(document, path)
-            ).filter((value)=>!!value?.toString
-            ).flatMap((value)=>tokenizer(value.toString())
-            ).map((token)=>normalizer(token)
-            ).forEach((token)=>{
+            fields.map((path)=>unwrap(document, path)).filter((value)=>!!value?.toString).flatMap((value)=>tokenizer(value.toString())).map((token)=>normalizer(token)).forEach((token)=>{
                 if (index[token]) index[token].add(id);
                 else index[token] = new Set([
                     id
@@ -90,11 +91,10 @@ function createSearch(options = {}) {
             });
         });
     };
-    const dump1 = ()=>Object.entries(index).reduce((all, [k, v])=>{
+    const dump = ()=>Object.entries(index).reduce((all, [k, v])=>{
             all[k] = Array.from(v);
             return all;
-        }, {})
-    ;
+        }, {});
     const hydrate = (dump, documents)=>{
         index = Object.entries(dump).reduce((all, [k, v])=>{
             all[k] = new Set(v);
@@ -108,7 +108,7 @@ function createSearch(options = {}) {
     return {
         search,
         add,
-        dump: dump1,
+        dump,
         hydrate
     };
 }
