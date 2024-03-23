@@ -1,8 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import {
-  assert,
-  assertEquals,
-} from "https://deno.land/std@0.171.0/testing/asserts.ts";
+import { assert, assertEquals } from "std/assert/mod.ts";
 import createSearch, {
   fullWordSplit,
   idProp,
