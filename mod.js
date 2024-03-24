@@ -247,9 +247,7 @@ export const startsWith = (input) => {
  * @param {Partial<IndexingOptions>} [options={}]
  * @returns {Search<T>}
  */
-export default function createSearch(
-  options = {},
-) {
+export default function createSearch(options = {}) {
   // Merge custom and default options
   /** @type {IndexingOptions} */
   const effectiveOptions = {
@@ -265,7 +263,7 @@ export default function createSearch(
    * Map of possible search terms -> document IDs
    * @type {SearchIndex}
    */
-  let index = {};
+  let index = Object.create(null);
 
   /**
    * Map of document IDs -> original documents
