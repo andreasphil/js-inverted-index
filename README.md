@@ -15,11 +15,12 @@
 - 📦 Supports SSR with client side hydration
 - 🛠 Customizable tokenization/normalization/search/etc. handlers
 - 🐛 Tiny footprint with no runtime dependencies
+- 🦕 Use everywhere: works with Deno, Node, and in the browser
 
 ## Import
 
 ```js
-import createSearch from "https://cdn.jsdelivr.net/gh/andreasphil/js-inverted-index@<tag>/mod.ts",
+import createSearch from "https://esm.sh/gh/andreasphil/js-inverted-index@<tag>/mod.js";
 ```
 
 ## Basic usage
@@ -86,5 +87,5 @@ can customize how ...
 - tokens are normalized, and
 - search results are determined.
 
-See the `IndexingOptions` type in [mod.ts](./mod.ts) for all the required
+See the `IndexingOptions` type in [mod.js](./mod.js) for all the required
 typings, and `createSearch` for an example with the default configuration.
