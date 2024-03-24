@@ -2,6 +2,5 @@
   "deno.config": "deno.json",
   "deno.enable": true,
   "deno.lint": true,
-  "deno.unstable": false,
   "editor.defaultFormatter": "denoland.vscode-deno"
 }

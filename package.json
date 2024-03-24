@@ -1,0 +1,10 @@
+{
+  "name": "@andreasphil/js-inverted-index",
+  "version": "1.3.0",
+  "description": "Lightweight, dependency-free index search with SSR support",
+  "author": "Andreas Philippi",
+  "license": "MIT",
+  "type": "module",
+  "main": "mod.js",
+  "repository": "https://github.com/andreasphil/js-inverted-index"
+}
