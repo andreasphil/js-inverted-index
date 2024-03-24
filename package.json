@@ -6,5 +6,10 @@
   "license": "MIT",
   "type": "module",
   "main": "mod.js",
-  "repository": "https://github.com/andreasphil/js-inverted-index"
+  "repository": "https://github.com/andreasphil/js-inverted-index",
+  "files": [
+    "mod.js",
+    "README.md",
+    "LICENSE.md"
+  ]
 }
