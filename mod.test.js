@@ -1,4 +1,4 @@
-// deno-lint-ignore-file no-explicit-any
+// @ts-check
 import { assert, assertEquals } from "std/assert/mod.ts";
 import createSearch, {
   fullWordSplit,
@@ -8,7 +8,7 @@ import createSearch, {
   matchAllTerms,
   startsWith,
   unwrap,
-} from "./mod.ts";
+} from "./mod.js";
 
 /* -------------------------------------------------- *
  * Helpers                                            *
@@ -56,12 +56,14 @@ Deno.test("unwrap", async (t) => {
   });
 
   await t.step("unwraps a nested prop with a number key from array", () => {
-    assertEquals(unwrap(obj, ["nested", 1 as any]), "number nested prop");
+    // @ts-expect-error Testing a different key type on purpose
+    assertEquals(unwrap(obj, ["nested", 1]), "number nested prop");
   });
 
   await t.step("unwraps a deeply nested prop from array", () => {
     assertEquals(
-      unwrap(obj, ["nested", "deep", 2 as any, "deeper"]),
+      // @ts-expect-error Testing a different key type on purpose
+      unwrap(obj, ["nested", "deep", 2, "deeper"]),
       "even deeper nested prop",
     );
   });
@@ -148,7 +150,7 @@ Deno.test("intersect", async (t) => {
 
 Deno.test("returns the property value from an object", () => {
   const obj = { prop1: "a", prop2: "b", prop3: "c" };
-  const fn = idProp<typeof obj>("prop2");
+  const fn = idProp("prop2");
   assertEquals(fn(obj), "b");
 });
 
@@ -175,7 +177,8 @@ Deno.test("normalizers", async (t) => {
     });
 
     await t.step("normalizes undefined", () => {
-      assertEquals(lowercaseTrim(undefined as any), undefined);
+      // @ts-expect-error Testing an edge case on purpose
+      assertEquals(lowercaseTrim(undefined), undefined);
     });
   });
 });
@@ -223,7 +226,8 @@ Deno.test("tokenizers", async (t) => {
     });
 
     await t.step("returns empty array if the input is undefined", () => {
-      assertEquals(fullWordSplit(undefined as any), []);
+      // @ts-expect-error Testing an edge case on purpose
+      assertEquals(fullWordSplit(undefined), []);
     });
   });
 
@@ -237,7 +241,8 @@ Deno.test("tokenizers", async (t) => {
     });
 
     await t.step("returns empty array if the input is undefined", () => {
-      assertEquals(startsWith(undefined as any), []);
+      // @ts-expect-error Testing an edge case on purpose
+      assertEquals(startsWith(undefined), []);
     });
 
     await t.step("returns empty array if no words are in the string", () => {
@@ -255,7 +260,8 @@ Deno.test("tokenizers", async (t) => {
  * -------------------------------------------------- */
 
 Deno.test("matchers", async (t) => {
-  const { search, hydrate } = createSearch<any>({
+  /** @type {import("./mod.js").Search<{ id: string }>} */
+  const { search, hydrate } = createSearch({
     searcher: matchAllTerms,
   });
 
