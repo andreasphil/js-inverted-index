@@ -67,12 +67,16 @@ index instead of computing it in the client.
 
 ```js
 // Server
-const { search, add, dump } = createSearch({/* Options */});
+const { search, add, dump } = createSearch({
+  /* Options */
+});
 add(yourDocuments);
 const serializedIndex = JSON.stringify(dump);
 
 // Client
-const { search, hydrate } = createSearch({/* Options */});
+const { search, hydrate } = createSearch({
+  /* Options */
+});
 hydrate(JSON.parse(serializedIndex), yourDocuments); // Document's won't be included in the dump
 search("query"); // Use as usual
 ```
@@ -89,3 +93,15 @@ can customize how ...
 
 See the `IndexingOptions` type in [mod.js](./mod.js) for all the required
 typings, and `createSearch` for an example with the default configuration.
+
+## Development
+
+This module is developed and tested primarily for Deno. To run the tests:
+
+```sh
+deno test
+```
+
+For node compatibility, there's also a `package.json` as well as type declarations in `mod.d.ts`. You can refersh the type delcarations by running:
+
+`npm run types`
