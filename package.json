@@ -6,10 +6,14 @@
   "license": "MIT",
   "type": "module",
   "main": "mod.js",
+  "types": "mod.d.ts",
   "repository": "https://github.com/andreasphil/js-inverted-index",
   "files": [
     "mod.js",
     "README.md",
     "LICENSE.md"
-  ]
+  ],
+  "scripts": {
+    "types": "npx -p typescript tsc ./mod.js --declaration --emitDeclarationOnly --allowJS --outdir . --lib es2020"
+  }
 }
