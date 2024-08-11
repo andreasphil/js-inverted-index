@@ -7,8 +7,7 @@
 </p>
 
 > ⚠️ Work in progress. Things are most certainly incomplete and/or broken, and
-> will definitely change. You'll probably want to try
-> [js-search](https://github.com/bvaughn/js-search) instead.
+> will definitely change.
 
 - 🏃‍♂️ Simple and efficient for when you need just a little bit more than
   `Array.filter()`
@@ -19,13 +18,13 @@
 
 ## Installation
 
-In Deno or the browser, you can import the module from ESM:
+From a CDN:
 
 ```js
 import createSearch from "https://esm.sh/gh/andreasphil/js-inverted-index@<tag>/mod.js";
 ```
 
-In Node, you can install the package from GitHub:
+With a package manager:
 
 ```sh
 npm i github:andreasphil/js-inverted-index#<tag>
@@ -100,13 +99,13 @@ typings, and `createSearch` for an example with the default configuration.
 
 ## Development
 
-This module is developed and tested primarily for Deno. To run the tests:
+This library is built with [Deno](https://deno.com). Test are powered by [Deno's test runner](https://docs.deno.com/runtime/manual/basics/testing/). To run the tests:
 
 ```sh
 deno test
 ```
 
-For node compatibility, there's also a `package.json` as well as type declarations in `mod.d.ts`. You can refersh the type delcarations by running:
+For Node.js compatibility, there's also a `package.json` as well as type declarations in `mod.d.ts`. You can refersh the type delcarations by running:
 
 ```sh
 npm run types
