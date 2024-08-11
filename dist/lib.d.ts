@@ -109,7 +109,7 @@ export function intersect<T>(...sets: Set<T>[]): Set<T>;
  * @param {keyof T} prop
  * @returns {IdentifierFn<T>}
  */
-export function idProp<T extends Record<string, any>>(prop: keyof T): IdentifierFn<T, string>;
+export function idProp<T extends Record<string, any>>(prop: keyof T): IdentifierFn<T>;
 /**
  * Returns a new tokenizer that splits a value based on the specified regex.
  *
@@ -124,7 +124,7 @@ export function regexSplit(exp: RegExp): TokenizerFn;
  * @param {Partial<IndexingOptions>} [options={}]
  * @returns {Search<T>}
  */
-export default function createSearch<T extends Record<string, unknown>>(options?: Partial<IndexingOptions>): Search<T>;
+export default function createSearch<T extends Searchable>(options?: Partial<IndexingOptions>): Search<T>;
 /**
  * Removes leading/trailing whitespace and converts the value to lowercase.
  * @type {NormalizerFn}
@@ -173,7 +173,7 @@ export type SearchIndexDump = Record<string, string[]>;
  * Takes a document and returns a value that can be used for uniquely
  * identifying the document.
  */
-export type IdentifierFn<T extends Record<string, unknown> = any, U = string> = (document: T) => U;
+export type IdentifierFn<T extends Searchable = any, U = string> = (document: T) => U;
 /**
  * Takes a string and splits it into individual tokens. These tokens will be
  * used for building the search index.
@@ -220,7 +220,7 @@ export type IndexingOptions = {
  * The closure returned when the search has been initialized. Contains methods
  * for interacting with the index, such as adding documents or searching.
  */
-export type Search<T extends Record<string, unknown>> = {
+export type Search<T extends Searchable> = {
     search: (term: string) => T[];
     add: (documents: T[]) => void;
     dump: () => SearchIndexDump;

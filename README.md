@@ -13,8 +13,8 @@
   `Array.filter()`
 - 📦 Supports SSR with client side hydration
 - 🛠 Customizable tokenization/normalization/search/etc. handlers
-- 🐛 Tiny footprint with no runtime dependencies
-- 🦕 Use everywhere: works with Deno, Node, and in the browser
+- 🐛 Tiny (<1kb min+gzip) footprint with no runtime dependencies
+- 🦕 Use everywhere: works with Deno, Node.js, and in the browser
 
 ## Installation
 

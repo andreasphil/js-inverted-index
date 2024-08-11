@@ -140,9 +140,7 @@ export function intersect(...sets) {
   const b = setsCopy.shift();
   const intersection = new Set();
 
-  // @ts-expect-error Checked earlier that this is not undefined
   a.forEach((itemFromA) => {
-    // @ts-expect-error Checked earlier that this is not undefined
     if (b.has(itemFromA)) intersection.add(itemFromA);
   });
 
