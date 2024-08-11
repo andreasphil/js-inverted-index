@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-  <strong>Lightweight index search with no runtime dependencies</strong>
+  <strong>Lightweight, dependency-free index search with SSR support</strong>
 </p>
 
 > ⚠️ Work in progress. Things are most certainly incomplete and/or broken, and
@@ -21,7 +21,7 @@
 From a CDN:
 
 ```js
-import createSearch from "https://esm.sh/gh/andreasphil/js-inverted-index@<tag>/mod.js";
+import createSearch from "https://esm.sh/gh/andreasphil/js-inverted-index@<tag>";
 ```
 
 With a package manager:
@@ -74,12 +74,16 @@ index instead of computing it in the client.
 
 ```js
 // Server
-const { search, add, dump } = createSearch({ /* Options */ });
+const { search, add, dump } = createSearch({
+  /* Options */
+});
 add(yourDocuments);
 const serializedIndex = JSON.stringify(dump);
 
 // Client
-const { search, hydrate } = createSearch({ /* Options */ });
+const { search, hydrate } = createSearch({
+  /* Options */
+});
 hydrate(JSON.parse(serializedIndex), yourDocuments); // Documents won't be included in the dump
 search("query"); // Use as usual
 ```
@@ -94,19 +98,15 @@ can customize:
 - how tokens are normalized, and
 - how search results are determined.
 
-See the `IndexingOptions` type in [mod.js](./mod.js) for all the required
+See the `IndexingOptions` type in [lib.js](./src/lib.js) for all the required
 typings, and `createSearch` for an example with the default configuration.
 
 ## Development
 
-This library is built with [Deno](https://deno.com). Test are powered by [Deno's test runner](https://docs.deno.com/runtime/manual/basics/testing/). To run the tests:
+This library is built with [esbuild](https://esbuild.github.io). Packages are managed by [pnpm](https://pnpm.io). Tests are powered by [Node.js' test runner](https://nodejs.org/en/learn/test-runner/). The following commands are available:
 
 ```sh
-deno test
-```
-
-For Node.js compatibility, there's also a `package.json` as well as type declarations in `mod.d.ts`. You can refersh the type delcarations by running:
-
-```sh
-npm run types
+pnpm test         # Run tests once
+pnpm test:watch   # Run tests in watch mode
+pnpm build        # Typecheck, emit declarations and bundle
 ```
