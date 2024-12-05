@@ -6,9 +6,6 @@
   <strong>Lightweight, dependency-free index search with SSR support</strong>
 </p>
 
-> ⚠️ Work in progress. Things are most certainly incomplete and/or broken, and
-> will definitely change.
-
 - 🏃‍♂️ Simple and efficient for when you need just a little bit more than
   `Array.filter()`
 - 📦 Supports SSR with client side hydration
