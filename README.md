@@ -98,3 +98,9 @@ pnpm test         # Run tests once
 pnpm test:watch   # Run tests in watch mode
 pnpm build        # Typecheck, emit declarations and bundle
 ```
+
+## Credits
+
+This library uses a number of open source packages listed in [package.json](package.json).
+
+Thanks 🙏
