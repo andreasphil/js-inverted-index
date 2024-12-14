@@ -85,18 +85,9 @@ hydrate(JSON.parse(serializedIndex), yourDocuments); // Documents won't be inclu
 search("query"); // Use as usual
 ```
 
-### Customization
+### API
 
-By providing the corresponding callbacks to the index during initialization, you
-can customize:
-
-- how IDs are extracted from documents,
-- how values are split into tokens,
-- how tokens are normalized, and
-- how search results are determined.
-
-See the `IndexingOptions` type in [lib.js](./src/lib.js) for all the required
-typings, and `createSearch` for an example with the default configuration.
+See [lib.d.ts](./dist/lib.d.ts) for all available methods and docs.
 
 ## Development
 
