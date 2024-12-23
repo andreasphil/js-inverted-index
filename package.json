@@ -1,6 +1,6 @@
 {
   "name": "@andreasphil/js-inverted-index",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Lightweight, dependency-free index search with SSR support",
   "author": "Andreas Philippi",
   "license": "MIT",
