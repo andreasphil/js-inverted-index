@@ -1,8 +1,7 @@
 // @ts-check
-
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import createSearch, * as s from "./lib.js";
+import createSearch, * as s from "./invertedIndex.js";
 
 /* -------------------------------------------------- *
  * Helpers                                            *

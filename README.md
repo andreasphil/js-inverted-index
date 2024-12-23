@@ -87,7 +87,7 @@ search("query"); // Use as usual
 
 ### API
 
-See [lib.d.ts](./dist/lib.d.ts) for all available methods and docs.
+See [invertedIndex.d.ts](./dist/invertedIndex.d.ts) for all available methods and docs.
 
 ## Development
 
