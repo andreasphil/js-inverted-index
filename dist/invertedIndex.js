@@ -1,2 +1,113 @@
-function g(t,e){if(!t)return;let n=Array.isArray(e)?e:e.split("."),[r,...i]=n;return i.length?g(t[r],i):t[r]}function x(...t){if(!t.length||t.some(d=>!d))return new Set;if(t.length===1)return t[0];let e=[...t],n=e.shift(),r=e.shift(),i=new Set;return n.forEach(d=>{r.has(d)&&i.add(d)}),e.unshift(i),x(...e)}function w(t){return e=>e[t]?.toString?.()}var y=t=>t?.trim().toLowerCase(),z=(t,e,n)=>{if(!e||Object.keys(t).length===0)return new Set;let{tokenizer:r,normalizer:i}=n,m=r(e).map(p=>i(p)).map(p=>t[p]);return x(...m)};function k(t){return e=>e?e.match(t)||[]:[]}var S=k(/\w+/g),O=t=>{let e=S(t),n=new Set;return e.filter(r=>r.length>0).forEach(r=>{for(let i=1;i<=r.length;i++)n.add(r.substring(0,i))}),Array.from(n)};function E(t={}){let e={tokenizer:S,identifier:w("id"),normalizer:y,searcher:z,fields:[],...t},n=Object.create(null),r={};return{search:f=>{let c=[];return e.searcher(n,f,e).forEach(s=>{r[s]&&c.push(r[s])}),c},add:f=>{let{tokenizer:c,identifier:h,normalizer:s,fields:u}=e;f.forEach(a=>{let l=h(a);r[l]=a,u.map(o=>g(a,o)).filter(o=>!!o?.toString).flatMap(o=>c(o.toString())).map(o=>s(o)).forEach(o=>{n[o]?n[o].add(l):n[o]=new Set([l])})})},dump:()=>{let f={};return Object.entries(n).reduce((c,[h,s])=>(c[h]=Array.from(s),c),f)},hydrate:(f,c)=>{let h={},s={};n=Object.entries(f).reduce((u,[a,l])=>(u[a]=new Set(l),u),h),r=c.reduce((u,a)=>(u[e.identifier(a)]=a,u),s)}}}export{E as default,S as fullWordSplit,w as idProp,x as intersect,y as lowercaseTrim,z as matchAllTerms,k as regexSplit,O as startsWith,g as unwrap};
-//# sourceMappingURL=invertedIndex.js.map
+// src/invertedIndex.js
+function unwrap(obj, prop) {
+  if (!obj) return void 0;
+  const path = Array.isArray(prop) ? prop : prop.split(".");
+  const [head, ...tail] = path;
+  if (tail.length) return unwrap(obj[head], tail);
+  else return obj[head];
+}
+function intersect(...sets) {
+  if (!sets.length || sets.some((set) => !set)) return /* @__PURE__ */ new Set();
+  else if (sets.length === 1) return sets[0];
+  const setsCopy = [...sets];
+  const a = setsCopy.shift();
+  const b = setsCopy.shift();
+  const intersection = /* @__PURE__ */ new Set();
+  a.forEach((itemFromA) => {
+    if (b.has(itemFromA)) intersection.add(itemFromA);
+  });
+  setsCopy.unshift(intersection);
+  return intersect(...setsCopy);
+}
+function idProp(prop) {
+  return (document) => document[prop]?.toString?.();
+}
+var lowercaseTrim = (input) => input?.trim().toLowerCase();
+var matchAllTerms = (index, term, options) => {
+  if (!term || Object.keys(index).length === 0) {
+    return /* @__PURE__ */ new Set();
+  }
+  const { tokenizer, normalizer } = options;
+  const termTokens = tokenizer(term).map((token) => normalizer(token));
+  const matches = termTokens.map((token) => index[token]);
+  return intersect(...matches);
+};
+function regexSplit(exp) {
+  return (input) => input ? input.match(exp) || [] : [];
+}
+var fullWordSplit = regexSplit(/\w+/g);
+var startsWith = (input) => {
+  const inputWords = fullWordSplit(input);
+  const tokens = /* @__PURE__ */ new Set();
+  inputWords.filter((word) => word.length > 0).forEach((word) => {
+    for (let i = 1; i <= word.length; i++) {
+      tokens.add(word.substring(0, i));
+    }
+  });
+  return Array.from(tokens);
+};
+function createSearch(options = {}) {
+  const effectiveOptions = {
+    tokenizer: fullWordSplit,
+    identifier: idProp("id"),
+    normalizer: lowercaseTrim,
+    searcher: matchAllTerms,
+    fields: [],
+    ...options
+  };
+  let index = /* @__PURE__ */ Object.create(null);
+  let indexedDocuments = {};
+  const search = (term) => {
+    const matches = [];
+    const idMatches = effectiveOptions.searcher(index, term, effectiveOptions);
+    idMatches.forEach((id) => {
+      if (indexedDocuments[id]) matches.push(indexedDocuments[id]);
+    });
+    return matches;
+  };
+  const add = (documents) => {
+    const { tokenizer, identifier, normalizer, fields } = effectiveOptions;
+    documents.forEach((document) => {
+      const id = identifier(document);
+      indexedDocuments[id] = document;
+      fields.map((path) => unwrap(document, path)).filter(
+        /** @returns {value is Stringable} */
+        (value) => !!value?.toString
+      ).flatMap((value) => tokenizer(value.toString())).map((token) => normalizer(token)).forEach((token) => {
+        if (index[token]) index[token].add(id);
+        else index[token] = /* @__PURE__ */ new Set([id]);
+      });
+    });
+  };
+  const dump = () => {
+    const dumpInit = {};
+    return Object.entries(index).reduce((all, [k, v]) => {
+      all[k] = Array.from(v);
+      return all;
+    }, dumpInit);
+  };
+  const hydrate = (dump2, documents) => {
+    const indexInit = {};
+    const documentsInit = {};
+    index = Object.entries(dump2).reduce((all, [k, v]) => {
+      all[k] = new Set(v);
+      return all;
+    }, indexInit);
+    indexedDocuments = documents.reduce((all, i) => {
+      all[effectiveOptions.identifier(i)] = i;
+      return all;
+    }, documentsInit);
+  };
+  return { search, add, dump, hydrate };
+}
+export {
+  createSearch as default,
+  fullWordSplit,
+  idProp,
+  intersect,
+  lowercaseTrim,
+  matchAllTerms,
+  regexSplit,
+  startsWith,
+  unwrap
+};
