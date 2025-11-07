@@ -6,27 +6,21 @@
   "license": "MIT",
   "type": "module",
   "repository": "https://github.com/andreasphil/js-inverted-index",
-  "files": [
-    "dist"
-  ],
   "exports": {
     ".": {
-      "import": "./dist/invertedIndex.js",
-      "types": "./dist/invertedIndex.js"
+      "import": "./mod.js",
+      "types": "./dist/mod.d.ts"
     }
   },
   "scripts": {
-    "dev": "node --run build:bundle -- --watch --servedir=.",
     "test": "node --test",
     "test:watch": "node --test --watch",
-    "build": "node --run build:types && node --run build:bundle",
+    "build": "node --run build:types",
     "build:types": "tsc",
-    "build:bundle": "esbuild src/invertedIndex.js --bundle --format=esm --outdir=dist",
-    "preversion": "node --run test && node --run build; git add dist/",
+    "preversion": "node --run test && node --run build && git add ./dist",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "esbuild": "^0.25.2",
     "jsdom": "^26.0.0",
     "typescript": "^5.8.3"
   }

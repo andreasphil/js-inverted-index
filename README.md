@@ -6,10 +6,10 @@
   <strong>Lightweight, dependency-free index search with SSR support</strong>
 </p>
 
-- 🏃‍♂️ Simple and efficient for when you need just a little bit more than
-  `Array.filter()`
+- 🏃‍♂️ Simple and efficient when you need just a little more than `Array.filter()`
 - 📦 Supports SSR with client side hydration
 - 🛠 Customizable tokenization/normalization/search/etc. handlers
+- 👌 Fully typed and tested
 - 🐛 Tiny (<1kb min+gzip) footprint with no runtime dependencies
 - 🦕 Use everywhere: works with Deno, Node.js, and in the browser
 
@@ -87,16 +87,16 @@ search("query"); // Use as usual
 
 ### API
 
-See [invertedIndex.d.ts](./dist/invertedIndex.d.ts) for all available methods and docs.
+See [mod.d.ts](./dist/mod.d.ts) for all available methods and docs.
 
 ## Development
 
-This library is built with [esbuild](https://esbuild.github.io). Packages are managed by [npm](https://npmjs.org). Tests are powered by [Node.js' test runner](https://nodejs.org/en/learn/test-runner/introduction). The following commands are available:
+Packages are managed by [npm](https://npmjs.org). Tests are powered by [Node.js' test runner](https://nodejs.org/en/learn/test-runner/introduction). The following commands are available:
 
 ```sh
 node --run test         # Run tests once
 node --run test:watch   # Run tests in watch mode
-node --run build        # Typecheck, emit declarations and bundle
+node --run build        # Typecheck and emit declarations
 ```
 
 ## Credits
