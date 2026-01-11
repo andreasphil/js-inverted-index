@@ -138,8 +138,8 @@ export function intersect(...sets) {
   const b = setsCopy.shift();
   const intersection = new Set();
 
-  a.forEach((itemFromA) => {
-    if (b.has(itemFromA)) intersection.add(itemFromA);
+  a?.forEach((itemFromA) => {
+    if (b?.has(itemFromA)) intersection.add(itemFromA);
   });
 
   setsCopy.unshift(intersection);
@@ -289,8 +289,8 @@ export default function createSearch(options = {}) {
 
       fields
         .map((path) => unwrap(document, path))
-        .filter(/** @returns {value is Stringable} */ (value) =>
-          !!value?.toString
+        .filter(
+          /** @returns {value is Stringable} */ (value) => !!value?.toString,
         )
         .flatMap((value) => tokenizer(value.toString()))
         .map((token) => normalizer(token))
