@@ -30,10 +30,7 @@ describe("unwrap", () => {
   });
 
   test("unwraps a deeply nested prop by string", () => {
-    assert.equal(
-      s.unwrap(obj, "nested.deep.2.deeper"),
-      "even deeper nested prop"
-    );
+    assert.equal(s.unwrap(obj, "nested.deep.2.deeper"), "even deeper nested prop");
   });
 
   test("returns undefined if the prop doesn't exist by string", () => {
@@ -57,15 +54,12 @@ describe("unwrap", () => {
     assert.equal(
       // @ts-expect-error Testing a different key type on purpose
       s.unwrap(obj, ["nested", "deep", 2, "deeper"]),
-      "even deeper nested prop"
+      "even deeper nested prop",
     );
   });
 
   test("returns undefined if the prop doesn't exist from array", () => {
-    assert.equal(
-      s.unwrap(obj, ["nested", "deep", "does", "not", "exist"]),
-      undefined
-    );
+    assert.equal(s.unwrap(obj, ["nested", "deep", "does", "not", "exist"]), undefined);
   });
 });
 
@@ -226,10 +220,7 @@ describe("tokenizers", () => {
     });
 
     test("omits markdown", () => {
-      assert.deepEqual(s.fullWordSplit("*markdown* [text](#)"), [
-        "markdown",
-        "text",
-      ]);
+      assert.deepEqual(s.fullWordSplit("*markdown* [text](#)"), ["markdown", "text"]);
     });
 
     test("trims non-word characters", () => {
@@ -252,13 +243,7 @@ describe("tokenizers", () => {
 
   describe("startsWith", () => {
     test("splits a single word", () => {
-      assert.deepEqual(s.startsWith("hello"), [
-        "h",
-        "he",
-        "hel",
-        "hell",
-        "hello",
-      ]);
+      assert.deepEqual(s.startsWith("hello"), ["h", "he", "hel", "hell", "hello"]);
     });
 
     test("splits multiple words", () => {
@@ -302,69 +287,69 @@ describe("matchers", () => {
     },
     Array(10)
       .fill(0)
-      .map((_, i) => ({ id: (i + 1).toString() }))
+      .map((_, i) => ({ id: (i + 1).toString() })),
   );
 
   test("finds matches for a term", () => {
     assert.deepEqual(
       search("lorem").map(({ id }) => id),
-      ["1", "2", "3"]
+      ["1", "2", "3"],
     );
   });
 
   test("finds matches for a non-existent term", () => {
     assert.deepEqual(
       search("diam").map(({ id }) => id),
-      []
+      [],
     );
   });
 
   test("finds matches for no term", () => {
     assert.deepEqual(
       search("").map(({ id }) => id),
-      []
+      [],
     );
   });
 
   test("finds matches for a term that normalizes to empty", () => {
     assert.deepEqual(
       search(",.#$").map(({ id }) => id),
-      []
+      [],
     );
   });
 
   test("finds matches for narrowing with a second term", () => {
     assert.deepEqual(
       search("lorem. amet?").map(({ id }) => id),
-      ["3"]
+      ["3"],
     );
   });
 
   test("finds matches for narrowing with a second term (swap)", () => {
     assert.deepEqual(
       search("amet? lorem.").map(({ id }) => id),
-      ["3"]
+      ["3"],
     );
   });
 
   test("finds matches for narrowing with a non-existent term", () => {
     assert.deepEqual(
       search("consetetur diam").map(({ id }) => id),
-      []
+      [],
     );
   });
 
   test("finds matches for narrowing with a third term", () => {
     assert.deepEqual(
       search("sit sadipscing **consetetur**").map(({ id }) => id),
-      ["2"]
+      ["2"],
     );
   });
 
   test("finds matches for narrowing with a third, non-existent term", () => {
     assert.deepEqual(
       search("sit sadipscing diam").map(({ id }) => id),
-      []
+      [],
     );
   });
 });
