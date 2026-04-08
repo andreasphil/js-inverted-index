@@ -15,7 +15,8 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
+    "types": ["node"]
   },
-  "include": ["**/*.js", "**/*.ts"],
   "exclude": ["**/*.config.js", "./dist/**/*"],
+  "include": ["**/*.js", "**/*.ts"]
 }
