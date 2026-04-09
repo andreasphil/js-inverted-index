@@ -11,25 +11,10 @@
 - 🛠 Customizable tokenization/normalization/search/etc. handlers
 - 👌 Fully typed and tested
 - 🐛 Tiny (<1kb min+gzip) footprint with no runtime dependencies
-- 🦕 Use everywhere: works with Deno, Node.js, and in the browser
-
-## Installation
-
-From a CDN:
-
-```js
-import createSearch from "https://esm.sh/gh/andreasphil/js-inverted-index@<tag>";
-```
-
-With a package manager:
-
-```sh
-pnpm i github:andreasphil/js-inverted-index#<tag>
-```
 
 ## Usage
 
-This package implements a simple
+This module implements a simple
 [inverted index](https://en.wikipedia.org/wiki/Inverted_index) for `string`s or
 stringified data, called documents. To get started, initialize the index and
 tell it which properties should be indexed:
@@ -84,23 +69,3 @@ const { search, hydrate } = createSearch({
 hydrate(JSON.parse(serializedIndex), yourDocuments); // Documents won't be included in the dump
 search("query"); // Use as usual
 ```
-
-### API
-
-See [jsInvertedIndex.d.ts](./dist/jsInvertedIndex.d.ts) for all available methods and docs.
-
-## Development
-
-Packages are managed by [pnpm](https://pnpm.io). Tests are powered by [Node.js' test runner](https://nodejs.org/en/learn/test-runner/introduction). The following commands are available:
-
-```sh
-node --run test         # Run tests once
-node --run test:watch   # Run tests in watch mode
-node --run build        # Typecheck and emit declarations
-```
-
-## Credits
-
-This library uses a number of open source packages listed in [package.json](package.json).
-
-Thanks 🙏
