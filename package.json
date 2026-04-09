@@ -8,8 +8,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./mod.js",
-      "types": "./dist/mod.d.ts"
+      "import": "./jsInvertedIndex.js",
+      "types": "./dist/jsInvertedIndex.d.ts"
     }
   },
   "scripts": {

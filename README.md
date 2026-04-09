@@ -24,7 +24,7 @@ import createSearch from "https://esm.sh/gh/andreasphil/js-inverted-index@<tag>"
 With a package manager:
 
 ```sh
-npm i github:andreasphil/js-inverted-index#<tag>
+pnpm i github:andreasphil/js-inverted-index#<tag>
 ```
 
 ## Usage
@@ -87,7 +87,7 @@ search("query"); // Use as usual
 
 ### API
 
-See [mod.d.ts](./dist/mod.d.ts) for all available methods and docs.
+See [jsInvertedIndex.d.ts](./dist/jsInvertedIndex.d.ts) for all available methods and docs.
 
 ## Development
 
